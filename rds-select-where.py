@@ -8,12 +8,13 @@ db = mysql.connector.connect(
     database="boopathi"
 )
 
-# Get the input value from user
-name = input("Enter the name to search for: ")
+# Read the input value from a file
+with open('/path/to/input/file.txt', 'r') as f:
+    id = f.read().strip()
 
 # Execute a SELECT query with WHERE clause
 cursor = db.cursor()
-query = f"SELECT * FROM training_students WHERE name = '{name}'"
+query = f"SELECT * FROM training_students WHERE id = {id}"
 cursor.execute(query)
 
 # Write the results to a file
