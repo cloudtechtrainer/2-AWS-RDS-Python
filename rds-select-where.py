@@ -47,6 +47,7 @@ db = mysql.connector.connect(
 )
 
 # Read the input value from a file
+getsecret()
 with open('/path/to/input/file.txt', 'r') as f:
     id = f.read().strip()
 
