@@ -12,7 +12,8 @@
 3. pip3 install mysql-connector-python  
 4. sudo yum install mysql  
 5. sudo yum install python3-boto3  
-6. Optionally you can give below mysql command to connect to mysql and run quries (instead of running in sqlelectron)  
+6. pip3 install pymysql  
+7. Optionally you can give below mysql command to connect to mysql and run quries (instead of running in sqlelectron)  
 mysql -u admin -p -h database-1.cluster-ro-clk1drfaf3ne.ap-northeast-1.rds.amazonaws.com -P 3306
 
 ## Execution
