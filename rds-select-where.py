@@ -1,65 +1,39 @@
-import mysql.connector
-
 import boto3
-from botocore.exceptions import ClientError
+import json
+import pymysql
 
+import os
+os.environ['AWS_ACCESS_KEY_ID'] = 'AKIAV44TXIU47BQNCZON'
+os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
 
-def get_secret():
+# Specify the AWS region
+region = 'ap-northeast-2'
 
-    secret_name = "test/MySql"
-    region_name = "ap-northeast-2"
+# Create a Secrets Manager client with the specified region
+secrets_client = boto3.client('secretsmanager', region_name=region)
 
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
+# Retrieve the secret value for your RDS database
+secret = secrets_client.get_secret_value(SecretId='test/MySqlSecret')
 
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
-    except ClientError as e:
-        # For a list of exceptions thrown, see
-        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-        raise e
+# Parse the secret JSON string and extract the database credentials
+secret_dict = json.loads(secret['SecretString'])
+db_host = secret_dict['host']
+db_port = secret_dict['port']
+db_user = secret_dict['username']
+db_pass = secret_dict['password']
+db_name = secret_dict['dbname']
 
-    # Decrypts secret using the associated KMS key.
-    secret = get_secret_value_response['SecretString']
-    
-    # Parse the secret JSON object
-    secret_dict = json.loads(secret)
-    username = secret_dict['username']
-    password = secret_dict['password']
-    host = secret_dict['host']
-    port = secret_dict['port']
-    database = secret_dict['database']
+# Connect to the RDS database using the extracted credentials
+conn = pymysql.connect(host=db_host, port=db_port, user=db_user, passwd=db_pass,db=db_name)
 
-    # Your code goes here.
+# Execute a SQL query on the database
+cur = conn.cursor()
+cur.execute('SELECT * FROM my_table')
+results = cur.fetchall()
 
-# Connect to the RDS MySQL database
-db = mysql.connector.connect(
-    host=host,
-    user=username,
-    password=password,
-    database=database
-)
-
-# Read the input value from a file
-getsecret()
-with open('/path/to/input/file.txt', 'r') as f:
-    id = f.read().strip()
-
-# Execute a SELECT query with WHERE clause
-cursor = db.cursor()
-query = f"SELECT * FROM training_students WHERE id = {id}"
-cursor.execute(query)
-
-# Write the results to a file
-with open('output.txt', 'w') as f:
-    for row in cursor:
-        f.write(str(row) + '\n')
+# Print the query results
+for row in results:
+    print(row)
 
 # Close the database connection
-db.close()
+conn.close()
