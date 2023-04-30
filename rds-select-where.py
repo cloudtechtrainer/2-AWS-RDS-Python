@@ -3,8 +3,8 @@ import json
 import pymysql
 
 import os
-os.environ['AWS_ACCESS_KEY_ID'] = 'AKIAV44TXIU47BQNCZON'
-os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
+os.environ['AWS_ACCESS_KEY_ID'] = '<><><>'
+os.environ['AWS_SECRET_ACCESS_KEY'] = '<><><>'
 
 # Specify the AWS region
 region = 'ap-northeast-2'
