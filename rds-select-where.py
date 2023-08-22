@@ -2,10 +2,10 @@ import mysql.connector
 
 # Connect to the RDS MySQL database
 db = mysql.connector.connect(
-    host="database-1.cluster-ro-clk1drfaf3ne.ap-northeast-1.rds.amazonaws.com",
-    user="admin",
-    password="Abcd1234",
-    database="boopathi"
+    host="*****.ap-northeast-1.rds.amazonaws.com",
+    user="*****",
+    password="****",
+    database="****"
 )
 
 # Read the input value from a file
